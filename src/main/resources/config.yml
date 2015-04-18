@@ -3,9 +3,9 @@ AfterHours: [2, 24, 96, 1000]
 
 commands:
 
-	#
-	# Parameters: <player name>(%s) <group name>(%s)
-	SetGroup: perm player %s addgroup %s
+  #
+  # Parameters: <player name>(%s) <group name>(%s)
+  SetGroup: perm player %s addgroup %s
 
 messages:
 
