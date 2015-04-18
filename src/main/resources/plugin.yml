@@ -1,5 +1,5 @@
 name: EithonRankUp
-main: net.eithon.plugin.Plugin
+main: net.eithon.plugin.rankup.Plugin
 version: 1.0.
 author: vanbrayne
 depend: [EithonLibrary]

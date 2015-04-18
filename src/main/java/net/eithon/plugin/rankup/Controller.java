@@ -14,8 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsService;
 
-public class RankUp {
-	private static RankUp singleton = null;
+public class Controller {
 	private static ConfigurableCommand addGroupCommand;
 	private static ConfigurableCommand removeGroupCommand;
 	private static ConfigurableMessage playTimeMessage;
@@ -29,18 +28,7 @@ public class RankUp {
 	private String[] _rankGroups;
 	private Integer[] _afterHours;
 
-	private RankUp() {
-	}
-
-	static RankUp get()
-	{
-		if (singleton == null) {
-			singleton = new RankUp();
-		}
-		return singleton;
-	}
-
-	void enable(EithonPlugin eithonPlugin){
+	public Controller(EithonPlugin eithonPlugin){
 		this._eithonPlugin = eithonPlugin;
 		addGroupCommand = eithonPlugin.getConfigurableCommand("commands.AddGroup", 2,
 				"perm player %s addgroup %s");
@@ -57,22 +45,22 @@ public class RankUp {
 		List<String> stringList = eithonPlugin.getConfiguration().getStringList("RankGroups");
 		if (stringList == null) this._rankGroups = new String[0];
 		else this._rankGroups = stringList.toArray(new String[0]);
-		Bukkit.getLogger().info(String.format("RankGroups: %s", CoreMisc.arrayToString(this._rankGroups)));
+		this._eithonPlugin.getEithonLogger().info(String.format("RankGroups: %s", CoreMisc.arrayToString(this._rankGroups)));
 		List<Integer> integerList = eithonPlugin.getConfiguration().getIntegerList("AfterHours");
 		if (integerList == null) this._afterHours = new Integer[0];
 		else this._afterHours = integerList.toArray(new Integer[0]);
-		Bukkit.getLogger().info(String.format("RankHours: %s", CoreMisc.arrayToString(this._afterHours)));
+		this._eithonPlugin.getEithonLogger().info(String.format("RankHours: %s", CoreMisc.arrayToString(this._afterHours)));
 		connectToPermissionService();
 		connectToOracle(this._eithonPlugin);
 	}
 
 	private void connectToOracle(EithonPlugin eithonPlugin) {
-		this._oraclePlugin = eithonPlugin.getJavaPlugin().getServer().getPluginManager().getPlugin("Oracle");
+		this._oraclePlugin = eithonPlugin.getServer().getPluginManager().getPlugin("Oracle");
 		if (this._oraclePlugin != null && this._oraclePlugin.isEnabled()) {
-			eithonPlugin.getLogger().info("Succesfully hooked into the Oracle plugin!");
+			eithonPlugin.getEithonLogger().info("Succesfully hooked into the Oracle plugin!");
 		} else {
 			this._oraclePlugin = null;
-			eithonPlugin.getLogger().warning("RankUp doesn't work without the Oracle plugin");			
+			eithonPlugin.getEithonLogger().warning("RankUp doesn't work without the Oracle plugin");			
 		}
 	}
 
@@ -85,7 +73,7 @@ public class RankUp {
 			// Eh...
 		}
 		if (this._permissionService == null) {
-			Bukkit.getLogger().warning("RankUp doesn't work without the zPermissions plugin");
+			this._eithonPlugin.getEithonLogger().warning("RankUp doesn't work without the zPermissions plugin");
 		}
 	}
 
@@ -122,7 +110,7 @@ public class RankUp {
 			player.sendMessage(String.format("Could not find any playtime information for player %s.", player.getName()));
 		} else {
 			playTimeHours = playTime.intValue();
-			RankUp.playTimeMessage.sendMessage(player, playTimeHours);
+			Controller.playTimeMessage.sendMessage(player, playTimeHours);
 		}
 		return playTimeHours;
 	}
@@ -141,22 +129,22 @@ public class RankUp {
 		int currentRankGroup = firstRankGroupPlayerIsMemberOfNow(player);
 		while ((currentRankGroup >= 0) && (currentRankGroup != currentRank))
 		{
-			RankUp.removeGroupCommand.execute(player.getName(), this._rankGroups[currentRankGroup]);
+			Controller.removeGroupCommand.execute(player.getName(), this._rankGroups[currentRankGroup]);
 			currentRankGroup = firstRankGroupPlayerIsMemberOfNow(player);
 		}
 		if ((currentRankGroup == currentRank) || (currentRank < 0)) return;
-		RankUp.addGroupCommand.execute(player.getName(), this._rankGroups[currentRank]);
+		Controller.addGroupCommand.execute(player.getName(), this._rankGroups[currentRank]);
 	}
 
 	private void reportNextRank(Player player, int playTimeHours) {
 		int nextRank = nextRank(player, playTimeHours);
 		if (nextRank < 0) {
-			RankUp.reachedHighestRankMessage.sendMessage(player, this._rankGroups[this._rankGroups.length-1]);		
+			Controller.reachedHighestRankMessage.sendMessage(player, this._rankGroups[this._rankGroups.length-1]);		
 			return;			
 		}
 		String groupName = this._rankGroups[nextRank];
 
-		RankUp.timeToNextRankMessage.sendMessage(player, this._afterHours[nextRank] - playTimeHours, groupName);
+		Controller.timeToNextRankMessage.sendMessage(player, this._afterHours[nextRank] - playTimeHours, groupName);
 	}
 
 	private int nextRank(Player player, int playTimeHours) {
