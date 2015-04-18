@@ -1,4 +1,4 @@
-package net.eithon.plugin.eithonrankup;
+package net.eithon.plugin.rankup;
 
 import java.util.List;
 import java.util.Set;

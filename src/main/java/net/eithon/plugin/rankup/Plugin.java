@@ -1,4 +1,4 @@
-package net.eithon.plugin.eithonrankup;
+package net.eithon.plugin.rankup;
 
 import net.eithon.library.extensions.EithonPlugin;
 
@@ -26,17 +26,6 @@ public final class Plugin extends JavaPlugin {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (args.length < 0) {
-			sender.sendMessage("Incomplete command...");
-			return false;
-		}
-		
-		if (!(sender instanceof Player)) {
-			sender.sendMessage("You must be a player to use this command.");
-			return false;
-		}
-
-		Commands.get().rankupCommand((Player) sender, args);
-		return true;
+		return Commands.get().onCommand(sender, args);
 	}
 }
