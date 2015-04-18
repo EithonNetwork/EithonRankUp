@@ -1,11 +1,24 @@
 RankGroups: [Member, Citizen, Veteran, Legendary]
 AfterHours: [2, 24, 96, 1000]
 
+#
+# Debug level
+#	0 = NONE (no debug messages)
+#	1 = MAJOR (only major messages)
+#	2 = MINOR (also minor messages)
+#	3 = VERBOSE (all messages)
+#
+EithonDebugLevel: 3
+
 commands:
 
   #
   # Parameters: <player name>(%s) <group name>(%s)
-  SetGroup: perm player %s addgroup %s
+  AddGroup: perm player %s addgroup %s
+
+  #
+  # Parameters: <player name>(%s) <group name>(%s)
+  RemoveGroup: perm player %s removegroup %s
 
 messages:
 

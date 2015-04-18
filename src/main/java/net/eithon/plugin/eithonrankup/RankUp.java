@@ -16,7 +16,8 @@ import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsService;
 
 public class RankUp {
 	private static RankUp singleton = null;
-	private static ConfigurableCommand setGroupCommand;
+	private static ConfigurableCommand addGroupCommand;
+	private static ConfigurableCommand removeGroupCommand;
 	private static ConfigurableMessage playTimeMessage;
 	private static ConfigurableMessage timeToNextRankMessage;
 	private static ConfigurableMessage rankedUpToGroupMessage;
@@ -41,15 +42,17 @@ public class RankUp {
 
 	void enable(EithonPlugin eithonPlugin){
 		this._eithonPlugin = eithonPlugin;
-		setGroupCommand = eithonPlugin.getConfigurableCommand("commands.SetGroup", 2,
+		addGroupCommand = eithonPlugin.getConfigurableCommand("commands.AddGroup", 2,
 				"perm player %s addgroup %s");
+		removeGroupCommand = eithonPlugin.getConfigurableCommand("commands.RemoveGroup", 2,
+				"perm player %s removegroup %s");
 		playTimeMessage = eithonPlugin.getConfigurableMessage("PlayTime", 1,
 				"You have played %d hours.");
-		timeToNextRankMessage = eithonPlugin.getConfigurableMessage("TimeToNextRank", 2,
+		timeToNextRankMessage = eithonPlugin.getConfigurableMessage("messages.TimeToNextRank", 2,
 				"You have %d hours left to rank %s.");
-		rankedUpToGroupMessage = eithonPlugin.getConfigurableMessage("RankedUpToGroup", 1,
+		rankedUpToGroupMessage = eithonPlugin.getConfigurableMessage("messages.RankedUpToGroup", 1,
 				"You have been ranked up to group %s!");
-		reachedHighestRankMessage = eithonPlugin.getConfigurableMessage("ReachedHighestRank", 1,
+		reachedHighestRankMessage = eithonPlugin.getConfigurableMessage("messages.ReachedHighestRank", 1,
 				"You have reached the highest rank, %s!");
 		List<String> stringList = eithonPlugin.getConfiguration().getStringList("RankGroups");
 		if (stringList == null) this._rankGroups = new String[0];
@@ -90,26 +93,31 @@ public class RankUp {
 	}
 
 	public void rankup(Player player) {
-		String currentGroup = null;
 		if (this._permissionService == null) {
 			player.sendMessage("RankUp doesn't work without the zPermissions plugin");			
 		} else {
-			currentGroup = reportCurrentGroup(player);
+			reportCurrentGroup(player);			
 		}
-		
+
 		int playTimeHours = 0;
 		if (this._oraclePlugin == null) {
 			player.sendMessage("RankUp doesn't work without the Oracle plugin");
 		} else {
-			playTimeHours = reportPlayTime(player, playTimeHours);
+			playTimeHours = reportPlayTime(player);
 		}
+		int currentRank = currentRank(player, playTimeHours);
+		int currentRankGroup = firstRankGroupPlayerIsMemberOfNow(player);
 
-		addRelevantGroups(player, currentGroup, playTimeHours);
-		reportNextGroup(player, playTimeHours);
+		if (currentRank > currentRankGroup) {
+			removeAndAddGroups(player, playTimeHours);
+			rankedUpToGroupMessage.sendMessage(player, this._rankGroups[currentRank]);
+		}
+		reportNextRank(player, playTimeHours);
 	}
 
-	private int reportPlayTime(Player player, int playTimeHours) {
+	private int reportPlayTime(Player player) {
 		Integer playTime = Oracle.playtimeHours.get(player);
+		int playTimeHours = 0;
 		if (playTime == null) {
 			player.sendMessage(String.format("Could not find any playtime information for player %s.", player.getName()));
 		} else {
@@ -119,50 +127,69 @@ public class RankUp {
 		return playTimeHours;
 	}
 
-	private String reportCurrentGroup(Player player) {
-		String lastGroup = null;
-		Set<String> groups = this._permissionService.getPlayerGroups(player.getUniqueId());
-		if ((groups == null) || (groups.size() == 0)) {
+	private void reportCurrentGroup(Player player) {
+		int rankGroup = firstRankGroupPlayerIsMemberOfNow(player);
+		if (rankGroup < 0) {
 			player.sendMessage("You are not member of any groups");
-		} else {
-			for (String s : this._rankGroups) {
-				if (groups.contains(s)) lastGroup = s;
-			}
-			if (lastGroup != null) {
-				player.sendMessage(String.format("You are currently ranked as %s.", lastGroup));
-			}
+			return;
 		}
-		return lastGroup;
-	}
-	private void addRelevantGroups(Player player, String currentGroup, int playTimeHours) {
-		for (int i = 0; i < this._afterHours.length; i++) {
-			int rankHour = this._afterHours[i].intValue();
-			String groupName = this._rankGroups[i];
-			if (rankHour > playTimeHours) {
-				break;
-			}
-			// Increase rank?
-			if (currentGroup == null) {
-				RankUp.setGroupCommand.execute(player.getName(), groupName);
-				RankUp.rankedUpToGroupMessage.sendMessage(player, groupName);			
-			} else {
-				if (groupName.equalsIgnoreCase(currentGroup)) currentGroup = null;
-			}
-		}
+		player.sendMessage(String.format("You are currently in the rank group %s.", this._rankGroups[rankGroup]));
 	}
 
-	private String reportNextGroup(Player player, int playTimeHours) {
-		String groupName = null;
+	private void removeAndAddGroups(Player player, int playTimeHours) {
+		int currentRank = currentRank(player, playTimeHours);
+		int currentRankGroup = firstRankGroupPlayerIsMemberOfNow(player);
+		while ((currentRankGroup >= 0) && (currentRankGroup != currentRank))
+		{
+			RankUp.removeGroupCommand.execute(player.getName(), this._rankGroups[currentRankGroup]);
+			currentRankGroup = firstRankGroupPlayerIsMemberOfNow(player);
+		}
+		if ((currentRankGroup == currentRank) || (currentRank < 0)) return;
+		RankUp.addGroupCommand.execute(player.getName(), this._rankGroups[currentRank]);
+	}
+
+	private void reportNextRank(Player player, int playTimeHours) {
+		int nextRank = nextRank(player, playTimeHours);
+		if (nextRank < 0) {
+			RankUp.reachedHighestRankMessage.sendMessage(player, this._rankGroups[this._rankGroups.length-1]);		
+			return;			
+		}
+		String groupName = this._rankGroups[nextRank];
+
+		RankUp.timeToNextRankMessage.sendMessage(player, this._afterHours[nextRank] - playTimeHours, groupName);
+	}
+
+	private int nextRank(Player player, int playTimeHours) {
 		for (int i = 0; i < this._afterHours.length; i++) {
 			int rankHour = this._afterHours[i].intValue();
-			groupName = this._rankGroups[i];
 			if (rankHour > playTimeHours) {
-				RankUp.timeToNextRankMessage.sendMessage(player, rankHour - playTimeHours, groupName);			
-				return groupName;
+				return i;
 			}
 		}
-		RankUp.reachedHighestRankMessage.sendMessage(player, groupName);		
-		return null;
+		return -1;
+	}
+
+	private int currentRank(Player player, int playTimeHours) {
+		for (int i = 0; i < this._afterHours.length; i++) {
+			int rankHour = this._afterHours[i].intValue();
+			if (rankHour > playTimeHours) {
+				return i-1;
+			}
+		}
+		return this._afterHours.length-1;
+	}
+
+	private int firstRankGroupPlayerIsMemberOfNow(Player player) {
+		if (this._permissionService == null) return -1;
+		Set<String> currentGroups = this._permissionService.getPlayerGroups(player.getUniqueId());
+		if ((currentGroups == null) || (currentGroups.size() == 0)) {
+			return -1;
+		} else {
+			for (int i = 0; i < this._rankGroups.length; i++) {
+				if (currentGroups.contains(this._rankGroups[i])) return i;		
+			}
+		}
+		return -1;
 	}
 
 }
