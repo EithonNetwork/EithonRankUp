@@ -69,10 +69,10 @@ public class RankUp {
 	private void connectToOracle(EithonPlugin eithonPlugin) {
 		this._oraclePlugin = eithonPlugin.getJavaPlugin().getServer().getPluginManager().getPlugin("Oracle");
 		if (this._oraclePlugin != null && this._oraclePlugin.isEnabled()) {
-			eithonPlugin.getDebug().info("Succesfully hooked into the Oracle plugin!");
+			eithonPlugin.getLogger().info("Succesfully hooked into the Oracle plugin!");
 		} else {
 			this._oraclePlugin = null;
-			eithonPlugin.getDebug().warning("RankUp doesn't work without the Oracle plugin");			
+			eithonPlugin.getLogger().warning("RankUp doesn't work without the Oracle plugin");			
 		}
 	}
 
