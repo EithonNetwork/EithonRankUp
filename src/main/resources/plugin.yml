@@ -1,0 +1,16 @@
+name: EitionRankUp
+main: net.eithon.plugin.eithonrankup.Plugin
+version: 1.0.
+author: vanbrayne
+depend: [EithonLibraryPlugin]
+softdepend: [zPermissions, Oracle]
+description: A Minecraft plugin for RankUp
+commands:
+  rankup:
+    description: Rank up a player based on play time
+    usage: /rankup
+    permission-message: You don't have <permission>
+permissions:
+  rankup.*:
+    description: Gives access to all rankup commands
+    default: op

@@ -1,0 +1,31 @@
+RankGroups: [Member, Citizen, Veteran, Legendary]
+AfterHours: [2, 24, 96, 1000]
+
+commands:
+
+	#
+	# Parameters: <player name>(%s) <group name>(%s)
+	SetGroup: perm player %s addgroup %s
+
+messages:
+
+  #
+  # Parameters: <hours remaining>(%d) <next rank>(%s)
+  CurrentRank: You are currently ranked as %s.
+
+  #
+  # Parameters: <playtime in hours>(%d)
+  PlayTime: You have played %d hours.
+
+  #
+  # Parameters: <group name>(%s)
+  RankedUpToGroup: You have been ranked up to group %s!
+
+  #
+  # Parameters: <hours remaining>(%d) <next rank>(%s)
+  TimeToNextRank: You have %d hours left to rank %s.
+
+  #
+  # Parameters: <higest rank>(%s)
+  ReachedHighestRank: You have reached the highest rank, %s!
+
