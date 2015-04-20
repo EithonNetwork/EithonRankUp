@@ -15,12 +15,6 @@ import org.bukkit.plugin.Plugin;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsService;
 
 public class Controller {
-	private static ConfigurableCommand addGroupCommand;
-	private static ConfigurableCommand removeGroupCommand;
-	private static ConfigurableMessage playTimeMessage;
-	private static ConfigurableMessage timeToNextRankMessage;
-	private static ConfigurableMessage rankedUpToGroupMessage;
-	private static ConfigurableMessage reachedHighestRankMessage;
 
 	private EithonPlugin _eithonPlugin = null;
 	private ZPermissionsService _permissionService = null;
@@ -30,18 +24,6 @@ public class Controller {
 
 	public Controller(EithonPlugin eithonPlugin){
 		this._eithonPlugin = eithonPlugin;
-		addGroupCommand = eithonPlugin.getConfigurableCommand("commands.AddGroup", 2,
-				"perm player %s addgroup %s");
-		removeGroupCommand = eithonPlugin.getConfigurableCommand("commands.RemoveGroup", 2,
-				"perm player %s removegroup %s");
-		playTimeMessage = eithonPlugin.getConfigurableMessage("PlayTime", 1,
-				"You have played %d hours.");
-		timeToNextRankMessage = eithonPlugin.getConfigurableMessage("messages.TimeToNextRank", 2,
-				"You have %d hours left to rank %s.");
-		rankedUpToGroupMessage = eithonPlugin.getConfigurableMessage("messages.RankedUpToGroup", 1,
-				"You have been ranked up to group %s!");
-		reachedHighestRankMessage = eithonPlugin.getConfigurableMessage("messages.ReachedHighestRank", 1,
-				"You have reached the highest rank, %s!");
 		List<String> stringList = eithonPlugin.getConfiguration().getStringList("RankGroups");
 		if (stringList == null) this._rankGroups = new String[0];
 		else this._rankGroups = stringList.toArray(new String[0]);
@@ -98,7 +80,7 @@ public class Controller {
 
 		if (currentRank > currentRankGroup) {
 			removeAndAddGroups(player, playTimeHours);
-			rankedUpToGroupMessage.sendMessage(player, this._rankGroups[currentRank]);
+			Config.M.rankedUpToGroup.sendMessage(player, this._rankGroups[currentRank]);
 		}
 		reportNextRank(player, playTimeHours);
 	}
@@ -110,7 +92,7 @@ public class Controller {
 			player.sendMessage(String.format("Could not find any playtime information for player %s.", player.getName()));
 		} else {
 			playTimeHours = playTime.intValue();
-			Controller.playTimeMessage.sendMessage(player, playTimeHours);
+			Config.M.playTime.sendMessage(player, playTimeHours);
 		}
 		return playTimeHours;
 	}
@@ -129,22 +111,22 @@ public class Controller {
 		int currentRankGroup = firstRankGroupPlayerIsMemberOfNow(player);
 		while ((currentRankGroup >= 0) && (currentRankGroup != currentRank))
 		{
-			Controller.removeGroupCommand.execute(player.getName(), this._rankGroups[currentRankGroup]);
+			Config.C.removeGroupCommand.execute(player.getName(), this._rankGroups[currentRankGroup]);
 			currentRankGroup = firstRankGroupPlayerIsMemberOfNow(player);
 		}
 		if ((currentRankGroup == currentRank) || (currentRank < 0)) return;
-		Controller.addGroupCommand.execute(player.getName(), this._rankGroups[currentRank]);
+		Config.C.addGroupCommand.execute(player.getName(), this._rankGroups[currentRank]);
 	}
 
 	private void reportNextRank(Player player, int playTimeHours) {
 		int nextRank = nextRank(player, playTimeHours);
 		if (nextRank < 0) {
-			Controller.reachedHighestRankMessage.sendMessage(player, this._rankGroups[this._rankGroups.length-1]);		
+			Config.M.reachedHighestRank.sendMessage(player, this._rankGroups[this._rankGroups.length-1]);		
 			return;			
 		}
 		String groupName = this._rankGroups[nextRank];
 
-		Controller.timeToNextRankMessage.sendMessage(player, this._afterHours[nextRank] - playTimeHours, groupName);
+		Config.M.timeToNextRank.sendMessage(player, this._afterHours[nextRank] - playTimeHours, groupName);
 	}
 
 	private int nextRank(Player player, int playTimeHours) {

@@ -11,7 +11,6 @@ public class CommandHandler implements ICommandHandler{
 
 	private net.eithon.plugin.rankup.Controller _controller;
 
-
 	public CommandHandler(EithonPlugin eithonPlugin, Controller controller) {
 		this._controller = controller;
 	}
