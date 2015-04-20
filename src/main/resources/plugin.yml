@@ -14,3 +14,7 @@ permissions:
   rankup.*:
     description: Gives access to all rankup commands
     default: op
+    rankup.staff: true
+  rankup.staff:
+    description: No rankup for staff
+    default: op

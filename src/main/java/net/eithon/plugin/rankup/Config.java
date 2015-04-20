@@ -25,9 +25,9 @@ public class Config {
 		public static ConfigurableCommand removeGroupCommand;
 
 		static void load(Configuration config) {
-			addGroupCommand = config.getConfigurableCommand("commands.AddGroup", 2,
+			addGroupCommand = config.getConfigurableCommand("commands.AddGroup_2", 2,
 					"perm player %s addgroup %s");
-			removeGroupCommand = config.getConfigurableCommand("commands.RemoveGroup", 2,
+			removeGroupCommand = config.getConfigurableCommand("commands.RemoveGroup_2", 2,
 					"perm player %s removegroup %s");
 		}
 
@@ -37,16 +37,19 @@ public class Config {
 		public static ConfigurableMessage timeToNextRank;
 		public static ConfigurableMessage rankedUpToGroup;
 		public static ConfigurableMessage reachedHighestRank;
+		public static ConfigurableMessage noRankUpForStaff;
 
 		static void load(Configuration config) {
-			playTime = config.getConfigurableMessage("PlayTime", 1,
+			playTime = config.getConfigurableMessage("PlayTime_1", 1,
 					"You have played %d hours.");
-			timeToNextRank = config.getConfigurableMessage("messages.TimeToNextRank", 2,
+			timeToNextRank = config.getConfigurableMessage("messages.TimeToNextRank_2", 2,
 					"You have %d hours left to rank %s.");
-			rankedUpToGroup = config.getConfigurableMessage("messages.RankedUpToGroup", 1,
+			rankedUpToGroup = config.getConfigurableMessage("messages.RankedUpToGroup_1", 1,
 					"You have been ranked up to group %s!");
-			reachedHighestRank = config.getConfigurableMessage("messages.ReachedHighestRank", 1,
+			reachedHighestRank = config.getConfigurableMessage("messages.ReachedHighestRank_1", 1,
 					"You have reached the highest rank, %s!");
+			noRankUpForStaff = config.getConfigurableMessage("messages.NoRankUpForStaff_0", 0,
+					"As staff you are not eligable for rank up.");
 		}		
 	}
 
