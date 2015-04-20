@@ -38,16 +38,15 @@
 		<dependency>
 			<groupId>net.eithon.plugin</groupId>
 			<artifactId>EithonLibrary</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>D:\workspace\EithonLibrary.jar</systemPath>
+			<version>[1.0,)</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>me.botsko.oracle</groupId>
 			<artifactId>Oracle</artifactId>
 			<version>1.0</version>
 			<scope>system</scope>
-			<systemPath>C:\Users\Lars\workspace\oracle-1.1-SNAPSHOT.jar</systemPath>
+			<systemPath>${basedir}\oracle-1.0.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.tyrannyofheaven.bukkit</groupId>
