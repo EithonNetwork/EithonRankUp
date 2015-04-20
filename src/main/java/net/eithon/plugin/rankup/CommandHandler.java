@@ -1,5 +1,6 @@
 package net.eithon.plugin.rankup;
 
+import net.eithon.library.extensions.EithonPlayer;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.plugin.CommandParser;
 import net.eithon.library.plugin.ICommandHandler;
@@ -18,8 +19,12 @@ public class CommandHandler implements ICommandHandler{
 	@Override
 	public boolean onCommand(CommandParser commandParser) {
 		if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(0,0)) return true;
-		Player player = commandParser.getPlayerOrInformSender();
+		EithonPlayer player = commandParser.getEithonPlayerOrInformSender();
 		if (player == null) return true;
+		if (player.hasPermission("rankup.staff")) {
+			Config.M.noRankUpForStaff.sendMessage(player.getPlayer());
+			return true;
+		}
 
 		rankupCommand(commandParser);
 		return true;

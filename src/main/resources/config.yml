@@ -14,31 +14,31 @@ commands:
 
   #
   # Parameters: <player name>(%s) <group name>(%s)
-  AddGroup: perm player %s addgroup %s
+  AddGroup_2: perm player %s addgroup %s
 
   #
   # Parameters: <player name>(%s) <group name>(%s)
-  RemoveGroup: perm player %s removegroup %s
+  RemoveGroup_2: perm player %s removegroup %s
 
 messages:
 
   #
-  # Parameters: <hours remaining>(%d) <next rank>(%s)
-  CurrentRank: You are currently ranked as %s.
-
-  #
   # Parameters: <playtime in hours>(%d)
-  PlayTime: You have played %d hours.
+  PlayTime_1: You have played %d hours.
 
   #
   # Parameters: <group name>(%s)
-  RankedUpToGroup: You have been ranked up to group %s!
+  RankedUpToGroup_1: You have been ranked up to group %s!
 
   #
   # Parameters: <hours remaining>(%d) <next rank>(%s)
-  TimeToNextRank: You have %d hours left to rank %s.
+  TimeToNextRank_2: You have %d hours left to rank %s.
 
   #
   # Parameters: <higest rank>(%s)
-  ReachedHighestRank: You have reached the highest rank, %s!
+  ReachedHighestRank_1: You have reached the highest rank, %s!
+
+  #
+  # Parameters: NONE
+  NoRankUpForStaff_0: As staff you are not eligable for rank up.
 
