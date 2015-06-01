@@ -8,7 +8,7 @@ AfterHours: [2, 24, 96, 1000]
 #	2 = MINOR (also minor messages)
 #	3 = VERBOSE (all messages)
 #
-EithonDebugLevel: 3
+EithonDebugLevel: 1
 
 commands:
 
