@@ -6,7 +6,6 @@ import net.eithon.library.plugin.CommandParser;
 import net.eithon.library.plugin.ICommandHandler;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class CommandHandler implements ICommandHandler{
 
