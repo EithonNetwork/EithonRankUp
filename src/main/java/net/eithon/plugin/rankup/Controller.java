@@ -2,7 +2,7 @@ package net.eithon.plugin.rankup;
 
 import java.util.Set;
 
-import me.botsko.oracle.Oracle;
+import net.eithon.plugin.stats.EithonStatsApi;
 import net.eithon.library.extensions.EithonPlugin;
 
 import org.bukkit.Bukkit;
@@ -14,21 +14,21 @@ public class Controller {
 
 	private EithonPlugin _eithonPlugin = null;
 	private ZPermissionsService _permissionService = null;
-	private Plugin _oraclePlugin;
+	private Plugin _statsPlugin;
 
 	public Controller(EithonPlugin eithonPlugin){
 		this._eithonPlugin = eithonPlugin;
 		connectToPermissionService();
-		connectToOracle(this._eithonPlugin);
+		connectToStats(this._eithonPlugin);
 	}
 
-	private void connectToOracle(EithonPlugin eithonPlugin) {
-		this._oraclePlugin = eithonPlugin.getServer().getPluginManager().getPlugin("Oracle");
-		if (this._oraclePlugin != null && this._oraclePlugin.isEnabled()) {
-			eithonPlugin.getEithonLogger().info("Succesfully hooked into the Oracle plugin!");
+	private void connectToStats(EithonPlugin eithonPlugin) {
+		this._statsPlugin = eithonPlugin.getServer().getPluginManager().getPlugin("EithonStats");
+		if (this._statsPlugin != null && this._statsPlugin.isEnabled()) {
+			eithonPlugin.getEithonLogger().info("Succesfully hooked into the EithonStats plugin!");
 		} else {
-			this._oraclePlugin = null;
-			eithonPlugin.getEithonLogger().warning("RankUp doesn't work without the Oracle plugin");			
+			this._statsPlugin = null;
+			eithonPlugin.getEithonLogger().warning("RankUp doesn't work without the EithonStats plugin");			
 		}
 	}
 
@@ -55,9 +55,9 @@ public class Controller {
 			reportCurrentGroup(player);			
 		}
 
-		int playTimeHours = 0;
-		if (this._oraclePlugin == null) {
-			player.sendMessage("RankUp doesn't work without the Oracle plugin");
+		long playTimeHours = 0;
+		if (this._statsPlugin == null) {
+			player.sendMessage("RankUp doesn't work without the EithonStats plugin");
 		} else {
 			playTimeHours = reportPlayTime(player);
 		}
@@ -71,15 +71,9 @@ public class Controller {
 		reportNextRank(player, playTimeHours);
 	}
 
-	private int reportPlayTime(Player player) {
-		Integer playTime = Oracle.playtimeHours.get(player);
-		int playTimeHours = 0;
-		if (playTime == null) {
-			player.sendMessage(String.format("Could not find any playtime information for player %s.", player.getName()));
-		} else {
-			playTimeHours = playTime.intValue();
-			Config.M.playTime.sendMessage(player, playTimeHours);
-		}
+	private long reportPlayTime(Player player) {
+		long playTimeHours = EithonStatsApi.getPlaytimeHours(player);
+		Config.M.playTime.sendMessage(player, playTimeHours);
 		return playTimeHours;
 	}
 
@@ -92,7 +86,7 @@ public class Controller {
 		player.sendMessage(String.format("You are currently in the rank group %s.", Config.V.rankGroups[rankGroup]));
 	}
 
-	private void removeAndAddGroups(Player player, int playTimeHours) {
+	private void removeAndAddGroups(Player player, long playTimeHours) {
 		int currentRank = currentRank(player, playTimeHours);
 		int currentRankGroup = firstRankGroupPlayerIsMemberOfNow(player);
 		while ((currentRankGroup >= 0) && (currentRankGroup != currentRank))
@@ -104,7 +98,7 @@ public class Controller {
 		Config.C.addGroupCommand.execute(player.getName(), Config.V.rankGroups[currentRank]);
 	}
 
-	private void reportNextRank(Player player, int playTimeHours) {
+	private void reportNextRank(Player player, long playTimeHours) {
 		int nextRank = nextRank(player, playTimeHours);
 		if (nextRank < 0) {
 			Config.M.reachedHighestRank.sendMessage(player, Config.V.rankGroups[Config.V.rankGroups.length-1]);		
@@ -115,9 +109,9 @@ public class Controller {
 		Config.M.timeToNextRank.sendMessage(player, Config.V.afterHours[nextRank] - playTimeHours, groupName);
 	}
 
-	private int nextRank(Player player, int playTimeHours) {
+	private int nextRank(Player player, long playTimeHours) {
 		for (int i = 0; i < Config.V.afterHours.length; i++) {
-			int rankHour = Config.V.afterHours[i].intValue();
+			long rankHour = Config.V.afterHours[i].intValue();
 			if (rankHour > playTimeHours) {
 				return i;
 			}
@@ -125,7 +119,7 @@ public class Controller {
 		return -1;
 	}
 
-	private int currentRank(Player player, int playTimeHours) {
+	private int currentRank(Player player, long playTimeHours) {
 		for (int i = 0; i < Config.V.afterHours.length; i++) {
 			int rankHour = Config.V.afterHours[i].intValue();
 			if (rankHour > playTimeHours) {

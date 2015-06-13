@@ -2,7 +2,6 @@ package net.eithon.plugin.rankup;
 
 import java.util.List;
 
-import net.eithon.library.core.CoreMisc;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.plugin.ConfigurableCommand;
 import net.eithon.library.plugin.ConfigurableMessage;
