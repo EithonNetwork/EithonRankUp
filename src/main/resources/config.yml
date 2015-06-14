@@ -40,5 +40,5 @@ messages:
 
   #
   # Parameters: NONE
-  NoRankUpForStaff_0: As staff you are not eligable for rank up.
+  NotEligibleForRankUp_0: You are not eligible for rank up.
 

@@ -47,7 +47,7 @@ public class Config {
 		public static ConfigurableMessage timeToNextRank;
 		public static ConfigurableMessage rankedUpToGroup;
 		public static ConfigurableMessage reachedHighestRank;
-		public static ConfigurableMessage noRankUpForStaff;
+		public static ConfigurableMessage notEligibleForRankUp;
 
 		static void load(Configuration config) {
 			playTime = config.getConfigurableMessage("PlayTime_1", 1,
@@ -58,8 +58,8 @@ public class Config {
 					"You have been ranked up to group %s!");
 			reachedHighestRank = config.getConfigurableMessage("messages.ReachedHighestRank_1", 1,
 					"You have reached the highest rank, %s!");
-			noRankUpForStaff = config.getConfigurableMessage("messages.NoRankUpForStaff_0", 0,
-					"As staff you are not eligable for rank up.");
+			notEligibleForRankUp = config.getConfigurableMessage("messages.NotEligibleForRankUp_0", 0,
+					"You are not eligible for rank up.");
 		}		
 	}
 
