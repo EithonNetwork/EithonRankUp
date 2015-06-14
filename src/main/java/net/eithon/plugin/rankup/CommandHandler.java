@@ -6,7 +6,6 @@ import net.eithon.library.plugin.CommandParser;
 import net.eithon.library.plugin.ICommandHandler;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class CommandHandler implements ICommandHandler{
 
@@ -21,8 +20,8 @@ public class CommandHandler implements ICommandHandler{
 		if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(0,0)) return true;
 		EithonPlayer player = commandParser.getEithonPlayerOrInformSender();
 		if (player == null) return true;
-		if (player.hasPermission("rankup.staff")) {
-			Config.M.noRankUpForStaff.sendMessage(player.getPlayer());
+		if (player.hasPermission("rankup.noteligible")) {
+			Config.M.notEligibleForRankUp.sendMessage(player.getPlayer());
 			return true;
 		}
 

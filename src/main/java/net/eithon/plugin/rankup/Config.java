@@ -1,5 +1,7 @@
 package net.eithon.plugin.rankup;
 
+import java.util.List;
+
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.plugin.ConfigurableCommand;
 import net.eithon.library.plugin.ConfigurableMessage;
@@ -15,8 +17,16 @@ public class Config {
 
 	}
 	public static class V {
+		public static String[] rankGroups;
+		public static Integer[] afterHours;
 
 		static void load(Configuration config) {
+			List<String> stringList = config.getStringList("RankGroups");
+			if (stringList == null) rankGroups = new String[0];
+			else rankGroups = stringList.toArray(new String[0]);
+			List<Integer> integerList = config.getIntegerList("AfterHours");
+			if (integerList == null) afterHours = new Integer[0];
+			else afterHours = integerList.toArray(new Integer[0]);
 		}
 
 	}
@@ -37,7 +47,7 @@ public class Config {
 		public static ConfigurableMessage timeToNextRank;
 		public static ConfigurableMessage rankedUpToGroup;
 		public static ConfigurableMessage reachedHighestRank;
-		public static ConfigurableMessage noRankUpForStaff;
+		public static ConfigurableMessage notEligibleForRankUp;
 
 		static void load(Configuration config) {
 			playTime = config.getConfigurableMessage("PlayTime_1", 1,
@@ -48,8 +58,8 @@ public class Config {
 					"You have been ranked up to group %s!");
 			reachedHighestRank = config.getConfigurableMessage("messages.ReachedHighestRank_1", 1,
 					"You have reached the highest rank, %s!");
-			noRankUpForStaff = config.getConfigurableMessage("messages.NoRankUpForStaff_0", 0,
-					"As staff you are not eligable for rank up.");
+			notEligibleForRankUp = config.getConfigurableMessage("messages.NotEligibleForRankUp_0", 0,
+					"You are not eligible for rank up.");
 		}		
 	}
 

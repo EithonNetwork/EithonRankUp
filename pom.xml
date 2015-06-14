@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.eithon.plugin</groupId>
 	<artifactId>EithonRankUp</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 	<name>EithonRankUp</name>
 	<build>
 		<plugins>
@@ -42,11 +42,10 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>me.botsko.oracle</groupId>
-			<artifactId>Oracle</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}\oracle-1.0.jar</systemPath>
+			<groupId>net.eithon.plugin</groupId>
+			<artifactId>EithonStats</artifactId>
+			<version>[1.0,)</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.tyrannyofheaven.bukkit</groupId>
