@@ -1,14 +1,24 @@
-RankGroups: [Member, Citizen, Veteran, Legendary]
-AfterHours: [2, 24, 96, 1000]
+#
+# The groups that we will rank up to
+RankGroups: [New, Member, Citizen, Veteran, Legendary]
 
 #
-# Debug level
-#	0 = NONE (no debug messages)
-#	1 = MAJOR (only major messages)
-#	2 = MINOR (also minor messages)
-#	3 = VERBOSE (all messages)
-#
-EithonDebugLevel: 1
+# The time it takes to rank up to one of the groups in RankGroups
+AfterHours: [0, 2, 24, 96, 1000]
+
+
+eithon:
+  UseMarkUpForMessages: 0
+  UseWrappingForMessages: 0
+  
+  #
+  # Debug level
+  #  0 = NONE (no debug messages)
+  #  1 = MAJOR (only major messages)
+  #  2 = MINOR (also minor messages)
+  #  3 = VERBOSE (all messages)
+  #
+  EithonDebugLevel: 1
 
 commands:
 
