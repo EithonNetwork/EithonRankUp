@@ -3,6 +3,7 @@ package net.eithon.plugin.rankup;
 import java.util.List;
 
 import net.eithon.library.extensions.EithonPlugin;
+import net.eithon.library.permissions.PermissionGroupLadder;
 import net.eithon.library.plugin.ConfigurableCommand;
 import net.eithon.library.plugin.ConfigurableMessage;
 import net.eithon.library.plugin.Configuration;
@@ -17,8 +18,8 @@ public class Config {
 
 	}
 	public static class V {
-		public static String[] rankGroups;
 		public static Integer[] afterHours;
+		public static String[] rankGroups;
 
 		static void load(Configuration config) {
 			List<String> stringList = config.getStringList("RankGroups");
@@ -31,14 +32,7 @@ public class Config {
 
 	}
 	public static class C {
-		public static ConfigurableCommand addGroupCommand;
-		public static ConfigurableCommand removeGroupCommand;
-
 		static void load(Configuration config) {
-			addGroupCommand = config.getConfigurableCommand("commands.AddGroup_2", 2,
-					"perm player %s addgroup %s");
-			removeGroupCommand = config.getConfigurableCommand("commands.RemoveGroup_2", 2,
-					"perm player %s removegroup %s");
 		}
 
 	}
