@@ -27,7 +27,7 @@ public class Controller {
 			eithonPlugin.getEithonLogger().info("Succesfully hooked into the EithonStats plugin!");
 		} else {
 			this._statsPlugin = null;
-			eithonPlugin.getEithonLogger().warning("RankUp doesn't work without the EithonStats plugin");			
+			eithonPlugin.getEithonLogger().warning("EithonRankUp doesn't work without the EithonStats plugin");			
 		}
 	}
 
@@ -35,15 +35,15 @@ public class Controller {
 	}
 
 	public void rankup(Player player) {
-		if (this._permissionService == null) {
-			player.sendMessage("RankUp doesn't work without the zPermissions plugin");			
+		if (!this._rankGroupLadder.canUpdatePermissionGroups()) {
+			player.sendMessage("EihonRankUp doesn't work without the zPermissions plugin");			
 		} else {
-			reportCurrentGroup(player);			
+			reportCurrentGroup(player);	
 		}
 
 		long playTimeHours = 0;
 		if (this._statsPlugin == null) {
-			player.sendMessage("RankUp doesn't work without the EithonStats plugin");
+			player.sendMessage("EithonRankUp doesn't work without the EithonStats plugin");
 		} else {
 			playTimeHours = reportPlayTime(player);
 		}

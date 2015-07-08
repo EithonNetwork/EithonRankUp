@@ -1,9 +1,9 @@
 name: EithonRankUp
 main: net.eithon.plugin.rankup.Plugin
-version: 1.1
+version: 1.3
 author: vanbrayne
-depend: [EithonLibrary]
-softdepend: [zPermissions, EithonStats]
+depend: [EithonLibrary, zPermissions]
+softdepend: [EithonStats]
 description: A Minecraft plugin for RankUp
 commands:
   rankup:
