@@ -20,16 +20,6 @@ eithon:
   #
   DebugLevel: 1
 
-commands:
-
-  #
-  # Parameters: <player name>(%s) <group name>(%s)
-  AddGroup_2: perm player %s addgroup %s
-
-  #
-  # Parameters: <player name>(%s) <group name>(%s)
-  RemoveGroup_2: perm player %s removegroup %s
-
 messages:
 
   #
