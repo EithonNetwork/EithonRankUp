@@ -2,7 +2,6 @@ package net.eithon.plugin.rankup;
 
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.permissions.PermissionGroupLadder;
-import net.eithon.library.permissions.PermissionMisc;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.plugin.stats.EithonStatsApi;
 
@@ -47,11 +46,11 @@ public class Controller {
 		} else {
 			playTimeHours = reportPlayTime(player);
 		}
-		int currentRank = expectedRank(player, playTimeHours);
-		int currentRankGroup = this._rankGroupLadder.currentLevel(player);
-		if (currentRank > currentRankGroup) {
+		int currentRankStartAtOne = expectedRankStartAtOne(player, playTimeHours);
+		int currentRankGroupStartAtOne = this._rankGroupLadder.currentLevel(player);
+		if (currentRankStartAtOne > currentRankGroupStartAtOne) {
 			removeAndAddGroups(player, playTimeHours);
-			Config.M.rankedUpToGroup.sendMessage(player, this._rankGroupLadder.getPermissionGroup(currentRank));
+			Config.M.rankedUpToGroup.sendMessage(player, this._rankGroupLadder.getPermissionGroup(currentRankStartAtOne));
 		}
 		reportNextRank(player, playTimeHours);
 	}
@@ -63,51 +62,51 @@ public class Controller {
 	}
 
 	private void reportCurrentGroup(Player player) {
-		int rankGroup = this._rankGroupLadder.currentLevel(player);
-		if (rankGroup < 0) {
-			player.sendMessage("You are not member of any groups");
+		int rankGroupStartAtOne = this._rankGroupLadder.currentLevel(player);
+		if (rankGroupStartAtOne < 1) {
+			player.sendMessage("You are not member of any rank groups");
 			return;
 		}
 		player.sendMessage(String.format("You are currently in the rank group %s.", 
-				this._rankGroupLadder.getPermissionGroup(rankGroup)));
+				this._rankGroupLadder.getPermissionGroup(rankGroupStartAtOne)));
 	}
 
 	private void removeAndAddGroups(Player player, long playTimeHours) {
 		verbose("removeAndAddGroups", "Enter");
-		int expectedRank = expectedRank(player, playTimeHours);
-		this._rankGroupLadder.updatePermissionGroups(player, expectedRank);
+		int expectedRankStartAtOne = expectedRankStartAtOne(player, playTimeHours);
+		this._rankGroupLadder.updatePermissionGroups(player, expectedRankStartAtOne);
 		verbose("removeAndAddGroups", "Leave");
 	}
 
 	private void reportNextRank(Player player, long playTimeHours) {
-		int nextRank = nextRank(player, playTimeHours);
-		if (nextRank < 0) {
+		int nextRankStartAtOne = nextRankStartAtOne(player, playTimeHours);
+		if (nextRankStartAtOne < 1) {
 			Config.M.reachedHighestRank.sendMessage(player, Config.V.rankGroups[Config.V.rankGroups.length-1]);		
 			return;			
 		}
-		String groupName = this._rankGroupLadder.getPermissionGroup(nextRank);
+		String groupName = this._rankGroupLadder.getPermissionGroup(nextRankStartAtOne);
 
-		Config.M.timeToNextRank.sendMessage(player, Config.V.afterHours[nextRank] - playTimeHours, groupName);
+		Config.M.timeToNextRank.sendMessage(player, Config.V.afterHours[nextRankStartAtOne-1] - playTimeHours, groupName);
 	}
 
-	private int nextRank(Player player, long playTimeHours) {
+	private int nextRankStartAtOne(Player player, long playTimeHours) {
 		for (int i = 0; i < Config.V.afterHours.length; i++) {
 			long rankHour = Config.V.afterHours[i].intValue();
+			if (rankHour > playTimeHours) {
+				return i+1;
+			}
+		}
+		return 0;
+	}
+
+	private int expectedRankStartAtOne(Player player, long playTimeHours) {
+		for (int i = 0; i < Config.V.afterHours.length; i++) {
+			int rankHour = Config.V.afterHours[i].intValue();
 			if (rankHour > playTimeHours) {
 				return i;
 			}
 		}
-		return -1;
-	}
-
-	private int expectedRank(Player player, long playTimeHours) {
-		for (int i = 0; i < Config.V.afterHours.length; i++) {
-			int rankHour = Config.V.afterHours[i].intValue();
-			if (rankHour > playTimeHours) {
-				return i-1;
-			}
-		}
-		return Config.V.afterHours.length-1;
+		return Config.V.afterHours.length;
 	}
 
 	private void verbose(String method, String format, Object... args) {
