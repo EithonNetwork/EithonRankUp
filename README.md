@@ -10,7 +10,6 @@ A RankUp plugin for Minecraft.
 
 ### 1.3 (2015-07-08)
 
-
 * CHANGE: Now uses EithonLibrary PermissionGroupLadder for permissions.
 * BUG: Now shows subcommands if no subcommand was given.
 
