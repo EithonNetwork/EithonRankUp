@@ -3,6 +3,7 @@ package net.eithon.plugin.rankup;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.permissions.PermissionGroupLadder;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
+import net.eithon.library.plugin.PluginMisc;
 import net.eithon.plugin.stats.EithonStatsApi;
 
 import org.bukkit.entity.Player;
@@ -21,7 +22,7 @@ public class Controller {
 	}
 
 	private void connectToStats(EithonPlugin eithonPlugin) {
-		this._statsPlugin = eithonPlugin.getServer().getPluginManager().getPlugin("EithonStats");
+		this._statsPlugin = PluginMisc.getPlugin("EithonStats");
 		if (this._statsPlugin != null && this._statsPlugin.isEnabled()) {
 			eithonPlugin.getEithonLogger().info("Succesfully hooked into the EithonStats plugin!");
 		} else {
