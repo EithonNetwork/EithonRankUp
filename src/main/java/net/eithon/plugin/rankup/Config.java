@@ -18,6 +18,7 @@ public class Config {
 	public static class V {
 		public static Integer[] afterHours;
 		public static String[] rankGroups;
+		public static int remindAfterMinutes;
 
 		static void load(Configuration config) {
 			List<String> stringList = config.getStringList("RankGroups");
@@ -26,6 +27,7 @@ public class Config {
 			List<Integer> integerList = config.getIntegerList("AfterHours");
 			if (integerList == null) afterHours = new Integer[0];
 			else afterHours = integerList.toArray(new Integer[0]);
+			remindAfterMinutes = config.getInt("RemindAfterMinutes", 10);
 		}
 
 	}
@@ -40,6 +42,7 @@ public class Config {
 		public static ConfigurableMessage rankedUpToGroup;
 		public static ConfigurableMessage reachedHighestRank;
 		public static ConfigurableMessage notEligibleForRankUp;
+		public static ConfigurableMessage rememberToRankUp;
 
 		static void load(Configuration config) {
 			playTime = config.getConfigurableMessage("PlayTime_1", 1,
@@ -52,6 +55,8 @@ public class Config {
 					"You have reached the highest rank, %s!");
 			notEligibleForRankUp = config.getConfigurableMessage("messages.NotEligibleForRankUp_0", 0,
 					"You are not eligible for rank up.");
+			rememberToRankUp = config.getConfigurableMessage("messages.RememberToRankUp_1", 1,
+					"You are now eligible for rank up to %s.");
 		}		
 	}
 

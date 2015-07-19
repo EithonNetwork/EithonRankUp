@@ -6,6 +6,9 @@ RankGroups: [New, Member, Citizen, Veteran, Legendary]
 # The time it takes to rank up to one of the groups in RankGroups
 AfterHours: [0, 2, 24, 96, 1000]
 
+#
+# A player that is able to rank up will be reminded every X minutes
+RemindAfterMinutes: 10
 
 eithon:
   UseMarkUpForMessages: 0
@@ -41,4 +44,8 @@ messages:
   #
   # Parameters: NONE
   NotEligibleForRankUp_0: You are not eligible for rank up.
+
+  #
+  # Parameters: <next rank>(%s)
+  RememberToRankUp_1: You are now eligible for rank up to %s.
 
