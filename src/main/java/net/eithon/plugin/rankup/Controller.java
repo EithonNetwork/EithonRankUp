@@ -1,9 +1,13 @@
 package net.eithon.plugin.rankup;
 
+import net.eithon.library.core.PlayerCollection;
+import net.eithon.library.extensions.EithonPlayer;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.permissions.PermissionGroupLadder;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.library.plugin.PluginMisc;
+import net.eithon.library.time.AlarmTrigger;
+import net.eithon.library.time.IRepeatable;
 import net.eithon.plugin.stats.EithonStatsApi;
 
 import org.bukkit.entity.Player;
@@ -14,11 +18,13 @@ public class Controller {
 	private EithonPlugin _eithonPlugin = null;
 	private Plugin _statsPlugin;
 	private PermissionGroupLadder _rankGroupLadder;
+	private PlayerCollection<EithonPlayer> _knownPlayers;
 
 	public Controller(EithonPlugin eithonPlugin){
 		this._eithonPlugin = eithonPlugin;
 		this._rankGroupLadder = new PermissionGroupLadder(eithonPlugin, false, Config.V.rankGroups);
 		connectToStats(this._eithonPlugin);
+		repeatRemindToRankup();
 	}
 
 	private void connectToStats(EithonPlugin eithonPlugin) {
@@ -32,6 +38,37 @@ public class Controller {
 	}
 
 	void disable() {
+	}
+
+	private void repeatRemindToRankup() {
+		final Controller thisObject = this;
+		AlarmTrigger.get().repeat("EithonRankUp rank up reminders", Config.V.remindAfterMinutes*60, 
+				new IRepeatable() {
+			@Override
+			public boolean repeat() {
+				remindToRankUp();
+				return true;
+			}
+		});
+	}
+
+	void remindToRankUp() {
+		for (EithonPlayer eithonPlayer : this._knownPlayers.values()) {
+			if (!eithonPlayer.isOnline()) continue;
+			Player player = eithonPlayer.getPlayer();
+			if (!EithonStatsApi.isActive(player)) continue;
+			long playTimeHours = EithonStatsApi.getPlaytimeHours(player);
+			int expectedRankStartAtOne = expectedRankStartAtOne(player, playTimeHours);
+			int currentRankStartAtOne = this._rankGroupLadder.currentLevel(player);
+			if (expectedRankStartAtOne > currentRankStartAtOne) {
+				remindToRankUp(player, expectedRankStartAtOne);
+			}
+		}
+	}
+
+	private void remindToRankUp(Player player, int expectedRankStartAtOne) {
+		String rankGroup = this._rankGroupLadder.getPermissionGroup(expectedRankStartAtOne);
+		Config.M.rememberToRankUp.sendMessage(player, rankGroup);
 	}
 
 	public void rankup(Player player) {
@@ -54,6 +91,14 @@ public class Controller {
 			Config.M.rankedUpToGroup.sendMessage(player, this._rankGroupLadder.getPermissionGroup(currentRankStartAtOne));
 		}
 		reportNextRank(player, playTimeHours);
+	}
+
+	public void playerJoined(Player player) {
+		this._knownPlayers.put(player, new EithonPlayer(player));
+	}
+
+	public void playerQuitted(Player player) {
+		this._knownPlayers.remove(player);
 	}
 
 	private long reportPlayTime(Player player) {

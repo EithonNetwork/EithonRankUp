@@ -4,6 +4,10 @@ A RankUp plugin for Minecraft.
 
 ## Release history
 
+### 1.4 (2015-07-19)
+
+* NEW: Now reminds players if they are eligible for a rank up.
+
 ### 1.3.1 (2015-07-13)
 
 * CHANGE: PermissionGroupLadder levels now starts at one.
