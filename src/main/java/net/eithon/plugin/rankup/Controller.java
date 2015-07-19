@@ -41,7 +41,6 @@ public class Controller {
 	}
 
 	private void repeatRemindToRankup() {
-		final Controller thisObject = this;
 		AlarmTrigger.get().repeat("EithonRankUp rank up reminders", Config.V.remindAfterMinutes*60, 
 				new IRepeatable() {
 			@Override
