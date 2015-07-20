@@ -23,6 +23,7 @@ public class Controller {
 	public Controller(EithonPlugin eithonPlugin){
 		this._eithonPlugin = eithonPlugin;
 		this._rankGroupLadder = new PermissionGroupLadder(eithonPlugin, false, Config.V.rankGroups);
+		this._knownPlayers = new PlayerCollection<EithonPlayer>();
 		connectToStats(this._eithonPlugin);
 		repeatRemindToRankup();
 	}
@@ -52,6 +53,7 @@ public class Controller {
 	}
 
 	void remindToRankUp() {
+		if (this._knownPlayers == null) return;
 		for (EithonPlayer eithonPlayer : this._knownPlayers.values()) {
 			if (!eithonPlayer.isOnline()) continue;
 			Player player = eithonPlayer.getPlayer();
