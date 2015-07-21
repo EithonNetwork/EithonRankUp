@@ -4,6 +4,14 @@ A RankUp plugin for Minecraft.
 
 ## Release history
 
+### 1.4.2 (2015-07-20)
+
+* BUG: NullPointerException (Controller.java:100)
+
+### 1.4.1 (2015-07-19)
+
+* BUG: EventListener was not activated.
+
 ### 1.4 (2015-07-19)
 
 * NEW: Now reminds players if they are eligible for a rank up.
