@@ -56,6 +56,7 @@ public class Controller {
 		if (this._knownPlayers == null) return;
 		for (EithonPlayer eithonPlayer : this._knownPlayers.values()) {
 			if (!eithonPlayer.isOnline()) continue;
+			if (eithonPlayer.hasPermission("rankup.noteligible")) continue;
 			Player player = eithonPlayer.getPlayer();
 			if (!EithonStatsApi.isActive(player)) continue;
 			long playTimeHours = EithonStatsApi.getPlaytimeHours(player);

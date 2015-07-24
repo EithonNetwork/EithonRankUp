@@ -4,6 +4,10 @@ A RankUp plugin for Minecraft.
 
 ## Release history
 
+### 1.4.3 (2015-07-22)
+
+* BUG: Reminded players that are not eligible for rankup.
+
 ### 1.4.2 (2015-07-20)
 
 * BUG: NullPointerException (Controller.java:100)
