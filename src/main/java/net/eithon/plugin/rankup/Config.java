@@ -18,7 +18,7 @@ public class Config {
 	public static class V {
 		public static Integer[] afterHours;
 		public static String[] rankGroups;
-		public static int remindAfterMinutes;
+		public static long remindAfterSeconds;
 
 		static void load(Configuration config) {
 			List<String> stringList = config.getStringList("RankGroups");
@@ -27,7 +27,7 @@ public class Config {
 			List<Integer> integerList = config.getIntegerList("AfterHours");
 			if (integerList == null) afterHours = new Integer[0];
 			else afterHours = integerList.toArray(new Integer[0]);
-			remindAfterMinutes = config.getInt("RemindAfterMinutes", 10);
+			remindAfterSeconds = config.getSeconds("RemindAfterTimeSpan", "10m");
 		}
 
 	}
