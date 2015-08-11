@@ -42,7 +42,7 @@ public class Controller {
 	}
 
 	private void repeatRemindToRankup() {
-		AlarmTrigger.get().repeat("EithonRankUp rank up reminders", Config.V.remindAfterMinutes*60, 
+		AlarmTrigger.get().repeat("EithonRankUp rank up reminders", Config.V.remindAfterSeconds, 
 				new IRepeatable() {
 			@Override
 			public boolean repeat() {

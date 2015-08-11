@@ -7,8 +7,8 @@ RankGroups: [New, Member, Citizen, Veteran, Legendary]
 AfterHours: [0, 2, 24, 96, 1000]
 
 #
-# A player that is able to rank up will be reminded every X minutes
-RemindAfterMinutes: 10
+# A player that is able to rank up will be reminded every elapsed time span
+RemindAfterTimeSpan: 10
 
 eithon:
   UseMarkUpForMessages: 0

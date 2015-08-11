@@ -1,6 +1,6 @@
 name: EithonRankUp
 main: net.eithon.plugin.rankup.Plugin
-version: 1.4.3
+version: 1.5
 author: vanbrayne
 depend: [EithonLibrary, zPermissions]
 softdepend: [EithonStats]
