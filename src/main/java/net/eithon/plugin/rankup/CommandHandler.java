@@ -17,6 +17,11 @@ public class CommandHandler implements ICommandHandler{
 
 	@Override
 	public boolean onCommand(CommandParser commandParser) {
+		String argument = commandParser.getArgumentStringAsLowercase();
+		if ((argument != null) && argument.equalsIgnoreCase("test")) {
+			Config.M.rememberToRankUp.sendMessage(commandParser.getSender(), "TESTING_STUFF");
+			return true;
+		}
 		if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(0,0)) return true;
 		EithonPlayer player = commandParser.getEithonPlayerOrInformSender();
 		if (player == null) return true;

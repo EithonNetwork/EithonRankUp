@@ -1,6 +1,6 @@
 name: EithonRankUp
 main: net.eithon.plugin.rankup.Plugin
-version: 1.5
+version: 1.5.1
 author: vanbrayne
 depend: [EithonLibrary, zPermissions]
 softdepend: [EithonStats]
@@ -14,7 +14,10 @@ permissions:
   rankup.*:
     description: Gives access to all rankup commands
     default: op
-    rankup.staff: true
+    rankup.test: true
+  rankup.test:
+    description: Gives access to the rankup test command
+    default: op
   rankup.noteligible:
     description: No rankup for some
     default: op
