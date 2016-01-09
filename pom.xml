@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.eithon.plugin</groupId>
 	<artifactId>EithonRankUp</artifactId>
-	<version>1.5.1</version>
+	<version>1.6</version>
 	<name>EithonRankUp</name>
 	<build>
 		<plugins>
@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>net.eithon.plugin</groupId>
 			<artifactId>EithonStats</artifactId>
-			<version>[1.3,)</version>
+			<version>[1.15,)</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

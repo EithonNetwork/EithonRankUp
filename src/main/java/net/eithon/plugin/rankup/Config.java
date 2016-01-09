@@ -46,9 +46,9 @@ public class Config {
 
 		static void load(Configuration config) {
 			playTime = config.getConfigurableMessage("PlayTime_1", 1,
-					"You have played %d hours.");
+					"You have played for %s.");
 			timeToNextRank = config.getConfigurableMessage("messages.TimeToNextRank_2", 2,
-					"You have %d hours left to rank %s.");
+					"You will reach next rank (%s) in %s.");
 			rankedUpToGroup = config.getConfigurableMessage("messages.RankedUpToGroup_1", 1,
 					"You have been ranked up to group %s!");
 			reachedHighestRank = config.getConfigurableMessage("messages.ReachedHighestRank_1", 1,

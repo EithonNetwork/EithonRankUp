@@ -4,14 +4,14 @@ RankGroups: [New, Member, Citizen, Veteran, Legendary]
 
 #
 # The time it takes to rank up to one of the groups in RankGroups
-AfterHours: [0, 2, 24, 96, 1000]
+AfterHours: [0, 1, 24, 96, 1000]
 
 #
 # A player that is able to rank up will be reminded every elapsed time span
 RemindAfterTimeSpan: 10
 
 eithon:
-  UseMarkUpForMessages: 0
+  UseMarkUpForMessages: 1
   UseWrappingForMessages: 0
   
   #
@@ -26,16 +26,16 @@ eithon:
 messages:
 
   #
-  # Parameters: <playtime in hours>(%d)
-  PlayTime_1: You have played %d hours.
+  # Parameters: <time span>(%s)
+  PlayTime_1: You have played for %s..
 
   #
   # Parameters: <group name>(%s)
   RankedUpToGroup_1: You have been ranked up to group %s!
 
   #
-  # Parameters: <hours remaining>(%d) <next rank>(%s)
-  TimeToNextRank_2: You have %d hours left to rank %s.
+  # Parameters: <next rank>(%s), <timespan>(%s)
+  TimeToNextRank_2: You will reach next rank (%s) in %s.
 
   #
   # Parameters: <higest rank>(%s)
@@ -43,9 +43,9 @@ messages:
 
   #
   # Parameters: NONE
-  NotEligibleForRankUp_0: You are not eligible for rank up.
+  NotEligibleForRankUp_0: Your rank is not eligible for rank up. 
 
   #
   # Parameters: <next rank>(%s)
-  RememberToRankUp_1: You are now eligible for rank up to %s.
+  RememberToRankUp_1: You are now eligible for rank up to %s. ([color=aqua]/rankup[/color])
 

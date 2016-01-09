@@ -8,6 +8,7 @@ import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.library.plugin.PluginMisc;
 import net.eithon.library.time.AlarmTrigger;
 import net.eithon.library.time.IRepeatable;
+import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.stats.EithonStatsApi;
 
 import org.bukkit.entity.Player;
@@ -80,19 +81,20 @@ public class Controller {
 			reportCurrentGroup(player);	
 		}
 
-		long playTimeHours = 0;
+		long playTimeSeconds = 0;
 		if (this._statsPlugin == null) {
 			player.sendMessage("EithonRankUp doesn't work without the EithonStats plugin");
 		} else {
-			playTimeHours = reportPlayTime(player);
+			playTimeSeconds = reportPlayTime(player);
 		}
+		long playTimeHours = playTimeSeconds/3600;
 		int currentRankStartAtOne = expectedRankStartAtOne(player, playTimeHours);
 		int currentRankGroupStartAtOne = this._rankGroupLadder.currentLevel(player);
 		if (currentRankStartAtOne > currentRankGroupStartAtOne) {
 			removeAndAddGroups(player, playTimeHours);
 			Config.M.rankedUpToGroup.sendMessage(player, this._rankGroupLadder.getPermissionGroup(currentRankStartAtOne));
 		}
-		reportNextRank(player, playTimeHours);
+		reportNextRank(player, playTimeSeconds);
 	}
 
 	public void playerJoined(Player player) {
@@ -104,9 +106,9 @@ public class Controller {
 	}
 
 	private long reportPlayTime(Player player) {
-		long playTimeHours = EithonStatsApi.getPlaytimeHours(player);
-		Config.M.playTime.sendMessage(player, playTimeHours);
-		return playTimeHours;
+		long playTimeSeconds = EithonStatsApi.getPlaytimeSeconds(player);
+		Config.M.playTime.sendMessage(player, TimeMisc.minutesToString(playTimeSeconds/60));
+		return playTimeSeconds;
 	}
 
 	private void reportCurrentGroup(Player player) {
@@ -126,7 +128,8 @@ public class Controller {
 		verbose("removeAndAddGroups", "Leave");
 	}
 
-	private void reportNextRank(Player player, long playTimeHours) {
+	private void reportNextRank(Player player, long playTimeSeconds) {
+		long playTimeHours = playTimeSeconds/3600;
 		int nextRankStartAtOne = nextRankStartAtOne(player, playTimeHours);
 		if (nextRankStartAtOne < 1) {
 			Config.M.reachedHighestRank.sendMessage(player, Config.V.rankGroups[Config.V.rankGroups.length-1]);		
@@ -134,7 +137,8 @@ public class Controller {
 		}
 		String groupName = this._rankGroupLadder.getPermissionGroup(nextRankStartAtOne);
 
-		Config.M.timeToNextRank.sendMessage(player, Config.V.afterHours[nextRankStartAtOne-1] - playTimeHours, groupName);
+		long secondsLeftToNextRank = Config.V.afterHours[nextRankStartAtOne-1]*3600 - playTimeSeconds;
+		Config.M.timeToNextRank.sendMessage(player, groupName, TimeMisc.minutesToString((long) Math.ceil(secondsLeftToNextRank/60.0)));
 	}
 
 	private int nextRankStartAtOne(Player player, long playTimeHours) {
