@@ -76,7 +76,7 @@ public class Controller {
 
 	public void rankup(Player player) {
 		if (!this._rankGroupLadder.canUpdatePermissionGroups()) {
-			player.sendMessage("EihonRankUp doesn't work without the zPermissions plugin");			
+			player.sendMessage("EihonRankUp doesn't work without the PowerPerms plugin");			
 		} else {
 			reportCurrentGroup(player);	
 		}
