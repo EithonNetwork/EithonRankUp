@@ -1,14 +1,14 @@
 #
 # The groups that we will rank up to
-RankGroups: [New, Member, Citizen, Veteran, Legendary]
+RankGroups: [Guest, New, Member, Citizen, Veteran, Legendary]
 
 #
 # The time it takes to rank up to one of the groups in RankGroups
-AfterHours: [0, 1, 24, 96, 1000]
+AfterHours: [0, 1, 2, 24, 96, 1000]
 
 #
 # A player that is able to rank up will be reminded every elapsed time span
-RemindAfterTimeSpan: 10
+RemindAfterTimeSpan: 10m
 
 eithon:
   UseMarkUpForMessages: 1

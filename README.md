@@ -4,6 +4,10 @@ A RankUp plugin for Minecraft.
 
 ## Release history
 
+### 1.7 (2016-05-01)
+
+* CHANGE: EithonLibrary now uses PowerPerms for permssions.
+
 ### 1.6 (2016-01-09)
 
 * CHANGE: Report time as timespan.
