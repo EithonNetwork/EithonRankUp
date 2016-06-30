@@ -4,7 +4,6 @@ import net.eithon.library.core.PlayerCollection;
 import net.eithon.library.extensions.EithonPlayer;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.permissions.PermissionGroupLadder;
-import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.library.plugin.PluginMisc;
 import net.eithon.library.time.AlarmTrigger;
 import net.eithon.library.time.IRepeatable;
@@ -162,8 +161,7 @@ public class Controller {
 	}
 
 	private void verbose(String method, String format, Object... args) {
-		String message = String.format(format, args);
-		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "%s: %s", method, message);
+		this._eithonPlugin.dbgVerbose("Controller", method, format, args);	
 	}
 
 }
