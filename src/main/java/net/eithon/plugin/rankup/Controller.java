@@ -32,10 +32,10 @@ public class Controller {
 	private void connectToStats(EithonPlugin eithonPlugin) {
 		this._statsPlugin = PluginMisc.getPlugin("EithonStats");
 		if (this._statsPlugin != null && this._statsPlugin.isEnabled()) {
-			eithonPlugin.getEithonLogger().info("Succesfully hooked into the EithonStats plugin!");
+			eithonPlugin.logInfo("Succesfully hooked into the EithonStats plugin!");
 		} else {
 			this._statsPlugin = null;
-			eithonPlugin.getEithonLogger().warning("EithonRankUp doesn't work without the EithonStats plugin");			
+			eithonPlugin.logWarn("EithonRankUp doesn't work without the EithonStats plugin");			
 		}
 	}
 
