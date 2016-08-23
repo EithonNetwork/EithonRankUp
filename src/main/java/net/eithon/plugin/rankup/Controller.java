@@ -69,7 +69,7 @@ public class Controller {
 	}
 
 	private void remindToRankUp(Player player, int expectedRankStartAtOne) {
-		String rankGroup = this._rankGroupLadder.getPermissionGroup(expectedRankStartAtOne);
+		String rankGroup = this._rankGroupLadder.getPermissionGroupName(expectedRankStartAtOne);
 		Config.M.rememberToRankUp.sendMessage(player, rankGroup);
 	}
 
@@ -91,7 +91,8 @@ public class Controller {
 		int currentRankGroupStartAtOne = this._rankGroupLadder.currentLevel(player);
 		if (currentRankStartAtOne > currentRankGroupStartAtOne) {
 			removeAndAddGroups(player, playTimeHours);
-			Config.M.rankedUpToGroup.sendMessage(player, this._rankGroupLadder.getPermissionGroup(currentRankStartAtOne));
+			final String groupName = this._rankGroupLadder.getPermissionGroupName(currentRankStartAtOne);
+			Config.M.rankedUpToGroup.sendMessage(player, groupName);
 		}
 		reportNextRank(player, playTimeSeconds);
 	}
@@ -116,8 +117,9 @@ public class Controller {
 			player.sendMessage("You are not member of any rank groups");
 			return;
 		}
+		final String groupName = this._rankGroupLadder.getPermissionGroupName(rankGroupStartAtOne);
 		player.sendMessage(String.format("You are currently in the rank group %s.", 
-				this._rankGroupLadder.getPermissionGroup(rankGroupStartAtOne)));
+				groupName));
 	}
 
 	private void removeAndAddGroups(Player player, long playTimeHours) {
@@ -134,7 +136,7 @@ public class Controller {
 			Config.M.reachedHighestRank.sendMessage(player, Config.V.rankGroups[Config.V.rankGroups.length-1]);		
 			return;			
 		}
-		String groupName = this._rankGroupLadder.getPermissionGroup(nextRankStartAtOne);
+		String groupName = this._rankGroupLadder.getPermissionGroupName(nextRankStartAtOne);
 
 		long secondsLeftToNextRank = Config.V.afterHours[nextRankStartAtOne-1]*3600 - playTimeSeconds;
 		Config.M.timeToNextRank.sendMessage(player, groupName, TimeMisc.minutesToString((long) Math.ceil(secondsLeftToNextRank/60.0)));
